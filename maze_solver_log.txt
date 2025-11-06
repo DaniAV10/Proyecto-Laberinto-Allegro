@@ -1,3 +1,0 @@
-Size: 5x5, Movimientos: 27, Tiempo: 4.82s, CaminoOptimo: 10
-Size: 13x12, Movimientos: 182, Tiempo: 23.39s, CaminoOptimo: 63
-Size: 7x10, Movimientos: 94, Tiempo: 11.08s, CaminoOptimo: 35
