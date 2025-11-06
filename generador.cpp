@@ -7,6 +7,7 @@
 #include <utility>     // Para std::pair
 #include <allegro5/allegro.h>//Para inicializar allegro
 #include <allegro5/allegro_image.h>//Para poder dibujar con allegro
+#include "celda.h"
 // Función para quitar muros entre dos celdas adyacentes
 void quitarMuroEntre(int x1, int y1, int x2, int y2, std::vector<std::vector<Celda>>& laberinto) {
 
@@ -62,7 +63,6 @@ std::vector<int> obtenerVecinosNoVisitados(int x, int y, std::vector<std::vector
 }
 
 
-//Esta función debe ser implementada por (Persona 2/Ronny).
 //Recibe la matriz del laberinto y debe modificar los muros para crear un camino válido.
 void generarLaberinto(std::vector<std::vector<Celda>>& laberinto) {
 	

@@ -12,14 +12,19 @@
 #include <map>
 #include <sstream>
 #include <algorithm>
+#include <queue>
+#include <tuple>
+#include "celda.h"
+
 
 //Guarda los datos de una partida en un archivo de texto
-void guardarEstadistica(int ancho, int alto, int movimientos, double tiempoSegundos) {
+void guardarEstadistica(int ancho, int alto, int movimientos, double tiempoSegundos, int caminoOptimo) {
     std::ofstream archivo("maze_solver_log.txt", std::ios::app);
     if (archivo.is_open()) {
-        archivo << "Size: " << ancho << "x" << alto //Puse "size" ya que no me deja poner la "ñ" de tamaño por la fuente
+        archivo << "Size: " << ancho << "x" << alto
             << ", Movimientos: " << movimientos
-            << ", Tiempo: " << std::fixed << std::setprecision(2) << tiempoSegundos << "s\n";
+            << ", Tiempo: " << std::fixed << std::setprecision(2) << tiempoSegundos << "s"
+            << ", CaminoOptimo: " << caminoOptimo << "\n";
         archivo.close();
     }
 }
@@ -75,7 +80,10 @@ void mostrarResumenEstadisticasGlobales(ALLEGRO_FONT* fuente) {
 
                     int ancho = std::stoi(dimension.substr(0, dimension.find('x')));
                     int alto = std::stoi(dimension.substr(dimension.find('x') + 1));
-                    int caminoOptimo = ancho * alto;
+                    size_t posOptimo = linea.find("CaminoOptimo: ");
+                    int caminoOptimo = (posOptimo != std::string::npos)
+                        ? std::stoi(linea.substr(posOptimo + 14))
+                        : ancho * alto;
 
                     double eficiencia = static_cast<double>(caminoOptimo) / movimientos;
                     sumaEficiencia[dimension] += eficiencia;
@@ -86,6 +94,7 @@ void mostrarResumenEstadisticasGlobales(ALLEGRO_FONT* fuente) {
         }
         archivo.close();
     }
+
 
     // Construir líneas de resumen
     for (const auto& par : mejorTiempo) {
@@ -160,7 +169,7 @@ void mostrarEstadisticasEnPantalla(ALLEGRO_FONT* fuente) {
         archivo.close();
     }
     else {
-        lineas.push_back("No se encontraron estadísticas.");
+        lineas.push_back("No se encontraron estadisticas.");
     }
 
     // Parámetros visuales
@@ -211,4 +220,53 @@ void mostrarEstadisticasEnPantalla(ALLEGRO_FONT* fuente) {
     }
 
     al_destroy_event_queue(queue);
+}
+
+int calcularCaminoOptimoBFS(const std::vector<std::vector<Celda>>& laberinto, int inicioX, int inicioY, int metaX, int metaY) {
+    int alto = laberinto.size();
+    int ancho = laberinto[0].size();
+
+    std::vector<std::vector<bool>> visitado(alto, std::vector<bool>(ancho, false));
+    std::queue<std::tuple<int, int, int>> cola; // x, y, pasos
+
+    cola.push({ inicioX, inicioY, 0 });
+    visitado[inicioY][inicioX] = true;
+
+    int dx[] = { 0, 0, -1, 1 };
+    int dy[] = { -1, 1, 0, 0 };
+
+    while (!cola.empty()) {
+        std::tuple<int, int, int> actual = cola.front();
+        int x = std::get<0>(actual);
+        int y = std::get<1>(actual);
+        int pasos = std::get<2>(actual);
+        cola.pop();
+
+        if (x == metaX && y == metaY) {
+            return pasos;
+        }
+
+        for (int i = 0; i < 4; ++i) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            if (nx >= 0 && ny >= 0 && nx < ancho && ny < alto && !visitado[ny][nx]) {
+                const Celda& actual = laberinto[y][x];
+                const Celda& vecino = laberinto[ny][nx];
+
+                bool conectado = false;
+                if (i == 0 && !actual.muroNorte && !vecino.muroSur) conectado = true;
+                if (i == 1 && !actual.muroSur && !vecino.muroNorte) conectado = true;
+                if (i == 2 && !actual.muroOeste && !vecino.muroEste) conectado = true;
+                if (i == 3 && !actual.muroEste && !vecino.muroOeste) conectado = true;
+
+                if (conectado) {
+                    visitado[ny][nx] = true;
+                    cola.push(std::make_tuple(nx, ny, pasos + 1));
+                }
+            }
+        }
+    }
+
+    return -1; // No se encontró camino
 }

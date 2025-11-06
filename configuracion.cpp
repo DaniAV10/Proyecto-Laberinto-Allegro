@@ -21,7 +21,7 @@ void mostrarConfiguracion(ALLEGRO_FONT* fuente, int ancho, int alto) {
     al_draw_text(fuente, al_map_rgb(255, 255, 255), 100, 160, 0, textoAlto);
 
     // Instrucción para continuar
-    al_draw_text(fuente, al_map_rgb(255, 255, 0), 100, 220, 0, "Presiona ENTER para continuar");
+    al_draw_text(fuente, al_map_rgb(255, 255, 0), 100, 220, 0,  "Presiona ENTER para continuar");
 
     al_flip_display(); // Muestra en pantalla
 }

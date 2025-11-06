@@ -1,9 +1,10 @@
 // celda.h
 #pragma once
+#include <vector>
 
 //Representa una celda del laberinto
 //Cada celda puede tener muros en sus cuatro lados y un estado de visita.
-// Esta estructura es utilizada por el generador de laberintos (Persona 2/Ronny) y por el visualizador/movimiento del jugador (Persona 3/Cristhofer).
+//Esta estructura es utilizada por el generador de laberintos y por el visualizador/movimiento del jugador.
 struct Celda {
     bool muroNorte = true;   // ¿Tiene muro arriba?
     bool muroSur = true;     // ¿Tiene muro abajo?

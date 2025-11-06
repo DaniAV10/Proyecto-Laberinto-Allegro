@@ -1,5 +1,6 @@
 // laberinto.cpp
 #include "laberinto.h"
+#include <vector>
 
 //Variables globales del laberinto
 
