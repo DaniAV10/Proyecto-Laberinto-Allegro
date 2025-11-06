@@ -47,7 +47,7 @@ void mostrarMenu(ALLEGRO_FONT* fuente) {
 
     //Dibuja los nombres del equipo en rojo más abajo
     al_draw_text(fuente, al_map_rgb(255, 0, 0), anchoPantalla / 2, 400, ALLEGRO_ALIGN_CENTER, "-Daniel Alejandro Arrieta Viquez-");
-    al_draw_text(fuente, al_map_rgb(255, 0, 0), anchoPantalla / 2, 440, ALLEGRO_ALIGN_CENTER, "-Ronny Espinoza Corderor-");
+    al_draw_text(fuente, al_map_rgb(255, 0, 0), anchoPantalla / 2, 440, ALLEGRO_ALIGN_CENTER, "-Ronny Espinoza Cordero-");
     al_draw_text(fuente, al_map_rgb(255, 0, 0), anchoPantalla / 2, 480, ALLEGRO_ALIGN_CENTER, "-Cristhofer Herrera-");
 
     //Actualiza la pantalla para mostrar los cambios
