@@ -18,14 +18,14 @@
 #include "laberinto.h"      //Estructura del laberinto
 #include "configuracion.h"  //Pantalla de configuración
 #include "estadisticas.h" //Pantalla de estadísticas
-#include "generador.h" //Vincular con función que reciba la matriz laberinto
-#include "juego.h" //Vincular con juego
+#include "generador.h" //Vincular con función que reciba la matriz laberinto (Persona 2/Ronny)
+#include "juego.h" //Vincular con juego (Persona 3/Cristopher)
 #include "victoria.h" //Obtiene la pantalla de victoria
 
 
 int main() {
     static DatosPartida datosVictoria; //Variable global temporal para guardar los datos de partida
-    //2. Inicialización de Allegro y sus componentes
+    //1. Inicialización de Allegro y sus componentes
     if (!al_init()) {
         fprintf(stderr, "Error al inicializar Allegro.\n"); //En caso de que de error
         return -1;
@@ -37,7 +37,7 @@ int main() {
     al_init_primitives_addon();  //Para dibujar líneas y formas
     al_init_image_addon();       // Para cargar el ícono
 
-    //3. Crear ventana, cola de eventos y fuente
+    //2. Crear ventana, cola de eventos y fuente
     ALLEGRO_DISPLAY* display = al_create_display(800, 600); // Tamaño ventana
     if (!display) {
         fprintf(stderr, "Error al crear la ventana.\n");
@@ -56,7 +56,7 @@ int main() {
         printf("No se pudo cargar el ícono\n");
     }
 
-    // 4. Configurar título de la ventana
+    // 3. Configurar título de la ventana
     al_set_window_title(display, "Laberinto Allegro");
 
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
@@ -69,7 +69,7 @@ int main() {
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_display_event_source(display));
 
-    //Fuente integrada, la que está por defecto
+    //Fuente integrada (Se usa temporalmente una por dedecto, sin tildes ni caracteres especiales)
     ALLEGRO_FONT* fuente = al_create_builtin_font();
 
     //4. Estado inicial del programa
@@ -116,9 +116,9 @@ int main() {
             //Inicializa la matriz del laberinto con celdas vacías
             inicializarLaberinto(ancho, alto);
 
-            generarLaberinto(laberinto); //Llamar al generador de laberintos
+            generarLaberinto(laberinto); //Llamar al generador de laberintos (Persona 2/Ronny)
 
-            //Cambia al estado de juego, se encarga de la visualización y movimiento
+            //Cambia al estado de juego, se encarga de la visualización y movimiento (Persona 3/Cristhofer)
             estado = JUEGO;
             break;
         }
@@ -170,7 +170,7 @@ int main() {
         }
 
         case JUEGO: {
-            //Llama al módulo de juego
+            //Llama al módulo de juego (Persona 3/Cristhofer))
             DatosPartida datos = ejecutarJuego(fuente, display);
             datosVictoria = datos;
             estado = VICTORIA;

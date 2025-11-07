@@ -34,7 +34,7 @@ DatosPartida ejecutarJuego(ALLEGRO_FONT* fuente, ALLEGRO_DISPLAY* displayPrincip
     );
 
     
-    // Posición inicial del jugador (centro de la primera celda)
+    // Posicion inicial del jugador (centro de la primera celda)
     float jugadorX = margenX + tamCelda / 2.0f;
     float jugadorY = margenY + tamCelda / 2.0f;
 
@@ -42,7 +42,7 @@ DatosPartida ejecutarJuego(ALLEGRO_FONT* fuente, ALLEGRO_DISPLAY* displayPrincip
     float radioJugador = tamCelda / 6.0f;
     float velocidad = tamCelda / 6.0f;
 
-    // Posición de la meta (centro de la última celda)
+    // Posicion de la meta (centro de la ultima celda)
     int metaX = anchoLaberinto - 1;
     int metaY = altoLaberinto - 1;
     float metaPosX = margenX + metaX * tamCelda + tamCelda / 2.0f;
@@ -64,7 +64,7 @@ DatosPartida ejecutarJuego(ALLEGRO_FONT* fuente, ALLEGRO_DISPLAY* displayPrincip
      ALLEGRO_SAMPLE* sonidoVictoria = NULL;
      bool sonidoReproducido = false;
 
-     // Inicializar audio (agregar esto antes de cargar sonidos)
+     // Inicializar audio
      if (!al_install_audio()) {
          std::cout << "Error inicializando audio\n";
      }
