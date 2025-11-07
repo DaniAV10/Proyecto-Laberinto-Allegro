@@ -8,11 +8,9 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-//Esta funcion será reemplazada por (Persona 3/Cristhofer)-Apunte de Daniel
-//Se deben agregar las partes del juego: mover jugador, detectar meta y un par de cosas más.
-/* El renderizado es solo modificar un poco lo que ya se tiene en la funcion ejecutarJuego.
-Y agregar aspectos simples de formato.*/
-//En este momento, puse temporalmente que simule una partida para probar el sistema de estadisticas
+#include <vector>
+#include "celda.h"
+
 DatosPartida ejecutarJuego(ALLEGRO_FONT* fuente, ALLEGRO_DISPLAY* displayPrincipal) {
     std::cout << "Juego iniciado con laberinto de " << anchoLaberinto << "x" << altoLaberinto << "\n";
 
@@ -89,7 +87,7 @@ DatosPartida ejecutarJuego(ALLEGRO_FONT* fuente, ALLEGRO_DISPLAY* displayPrincip
 
     ALLEGRO_EVENT_QUEUE* colaEventos = al_create_event_queue();
     al_register_event_source(colaEventos, al_get_display_event_source(display));
-    al_register_event_source(colaEventos, al_get_keyboard_event_source());
+    al_register_event_source(colaEventos, al_get_keyboard_event_source()); // ← AGREGAR ESTA
 
     while (redibujar) {//Ciclo para generar.
         ALLEGRO_EVENT evento;
@@ -100,10 +98,6 @@ DatosPartida ejecutarJuego(ALLEGRO_FONT* fuente, ALLEGRO_DISPLAY* displayPrincip
                 teclas[evento.keyboard.keycode] = true;
             else if (evento.type == ALLEGRO_EVENT_KEY_UP)
                 teclas[evento.keyboard.keycode] = false;
-        }
-
-        if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-            redibujar = false;
         }
 
         if (!juegoGanado) {
@@ -269,20 +263,13 @@ DatosPartida ejecutarJuego(ALLEGRO_FONT* fuente, ALLEGRO_DISPLAY* displayPrincip
                 "Presiona ESC para salir");
         }
         else {
-            /*
-            al_draw_text(fuente, al_map_rgb(255, 255, 255), 10, 10, 0,
-                "Laberinto Generado - Llega al cuadrado rojo - Presiona ESC para salir");
-            al_draw_textf(fuente, al_map_rgb(255, 255, 255), 10, 30, 0,
-                "Movimientos: %d", movimientos);
-            al_draw_textf(fuente, al_map_rgb(255, 255, 255), 10, 50, 0,
-                "Tiempo: %.1f segundos", al_get_time() - tiempoInicio);
-            */
+          
             int panelX = 20;
             int panelY = 20;
             int salto = 20;
 
             al_draw_text(fuente, al_map_rgb(255, 255, 255), panelX, panelY, 0,
-                "Laberinto Generado");
+                "Laberinto Generado - Presiona ESC para salir del juego");
             al_draw_text(fuente, al_map_rgb(255, 255, 255), panelX, panelY + salto, 0,
                 "Objetivo: llegar al cuadrado rojo");
             al_draw_textf(fuente, al_map_rgb(255, 255, 255), panelX, panelY + salto * 2, 0,
@@ -307,12 +294,11 @@ DatosPartida ejecutarJuego(ALLEGRO_FONT* fuente, ALLEGRO_DISPLAY* displayPrincip
 
     al_destroy_event_queue(colaEventos);
     
-    //if (sonidoVictoria) al_destroy_sample(sonidoVictoria);
-    //al_uninstall_audio();
-
+  
     // Guardar estadísticas reales
     if (juegoGanado) {
-        guardarEstadistica(anchoLaberinto, altoLaberinto, movimientos, tiempoSegundos);
+        int caminoOptimo = calcularCaminoOptimoBFS(laberinto, 0, 0, anchoLaberinto - 1, altoLaberinto - 1);
+        guardarEstadistica(anchoLaberinto, altoLaberinto, movimientos, tiempoSegundos, caminoOptimo);;
         std::cout << "Juego completado! Movimientos: " << movimientos << ", Tiempo: " << tiempoSegundos << " segundos\n";
     }
     else {
